@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Use Vite env var if available (set VITE_API_URL on Vercel) otherwise fallback to the known Render URL
-const API_URL = import.meta.env.VITE_API_URL || 'https://todo-backend-snps.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://todo-backend-snps.onrender.com';
 
 // Debug: Log where API requests will be sent (helps detect builds that didn't pick up env vars)
 console.log('API URL:', API_URL, '| VITE_API_URL:', import.meta.env.VITE_API_URL);
