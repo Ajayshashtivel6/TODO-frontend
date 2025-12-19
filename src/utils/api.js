@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://todo-backend-snps.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -14,6 +14,17 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Handle blocked requests
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.message.includes('ERR_BLOCKED_BY_CLIENT')) {
+      console.warn('Request blocked by ad blocker. Please disable ad blocker for this site.');
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Auth API
 export const authAPI = {
