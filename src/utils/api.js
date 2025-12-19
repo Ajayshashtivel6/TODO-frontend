@@ -39,19 +39,25 @@ api.interceptors.response.use(
   }
 );
 
-// Auth API
+// Runtime sanity checks and diagnostics
+console.log('Client origin:', window.location.origin);
+if (!API_URL.startsWith('http')) {
+  console.warn('API_URL does not appear to be absolute. Forcing fallback to the canonical backend URL.');
+}
+
+// Auth API - use absolute URLs (adds resilience if baseURL is missing/stale)
 export const authAPI = {
-  login: (credentials) => api.post('/auth/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
-  getMe: () => api.get('/auth/me'),
+  login: (credentials) => api.post(`${API_URL.replace(/\/$/, '')}/auth/login`, credentials),
+  register: (userData) => api.post(`${API_URL.replace(/\/$/, '')}/auth/register`, userData),
+  getMe: () => api.get(`${API_URL.replace(/\/$/, '')}/auth/me`),
 };
 
-// Tasks API
+// Tasks API - use absolute URLs
 export const tasksAPI = {
-  getTasks: () => api.get('/tasks'),
-  createTask: (task) => api.post('/tasks', task),
-  updateTask: (id, task) => api.put(`/tasks/${id}`, task),
-  deleteTask: (id) => api.delete(`/tasks/${id}`),
+  getTasks: () => api.get(`${API_URL.replace(/\/$/, '')}/tasks`),
+  createTask: (task) => api.post(`${API_URL.replace(/\/$/, '')}/tasks`, task),
+  updateTask: (id, task) => api.put(`${API_URL.replace(/\/$/, '')}/tasks/${id}`, task),
+  deleteTask: (id) => api.delete(`${API_URL.replace(/\/$/, '')}/tasks/${id}`),
 };
 
 export default api;
